@@ -74,7 +74,8 @@ class MetricsCollector:
             path = self.db_path
             with sqlite3.connect(path) as conn:
                 conn.execute(
-                    'INSERT INTO worker_metrics (timestamp, worker_id, cpu_util, io_read_mb_s, batch_time_ms) '
+                    'INSERT INTO worker_metrics '
+                    '(timestamp, worker_id, cpu_util, io_read_mb_s, batch_time_ms) '
                     'VALUES (?, ?, ?, ?, ?)',
                     (
                         metrics.timestamp, metrics.worker_id, metrics.cpu_util, 
@@ -88,7 +89,8 @@ class MetricsCollector:
              path = self.db_path
              with sqlite3.connect(path) as conn:
                 conn.execute(
-                    'INSERT INTO assignments (epoch, worker_id, shard_id, batch_time_ms) VALUES (?, ?, ?, ?)',
+                    'INSERT INTO assignments (epoch, worker_id, shard_id, batch_time_ms) '
+                    'VALUES (?, ?, ?, ?)',
                     (log.epoch, log.worker_id, log.shard_id, log.mean_batch_time_ms)
                 )
 
