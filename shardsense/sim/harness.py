@@ -36,7 +36,10 @@ class SimulationEngine:
             assigned_ids.extend(s_list)
         
         if sorted(assigned_ids) != sorted(self.shards.keys()):
-            raise ValueError(f"Invalid assignment: Shard count mismatch. Expected {len(self.shards)}, got {len(assigned_ids)}")
+            raise ValueError(
+                f"Invalid assignment: Shard count mismatch. "
+                f"Expected {len(self.shards)}, got {len(assigned_ids)}"
+            )
             
         self.current_assignments = new_map
 

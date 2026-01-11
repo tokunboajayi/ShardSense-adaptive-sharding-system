@@ -33,7 +33,7 @@ def run_real_demo():
     
     for epoch in range(EPOCHS):
         print(f"\n--- Epoch {epoch} ---")
-        epoch_start = time.time()
+        print(f"\n--- Epoch {epoch} ---")
         
         worker_times = {}
         

@@ -43,7 +43,9 @@ class RuntimePredictor:
         if not self.is_trained:
             # Fallback heuristic if untrained
             # Time = Size / IO + 100 * Diff
-            return (shard_state["size_mb"] / worker_state["io_read_mb_s"]) * 1000 + (100 * shard_state["mean_decode_ms"])
+            return (shard_state["size_mb"] / worker_state["io_read_mb_s"]) * 1000 + (
+                100 * shard_state["mean_decode_ms"]
+            )
 
         # Construct single row
         row = {
