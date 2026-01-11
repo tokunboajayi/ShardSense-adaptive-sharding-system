@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from torch.utils.data import DataLoader, Dataset
 
@@ -80,7 +80,7 @@ class ShardSenseRuntime:
 
     def _rebalance(self):
         # Construct state for planner
-        worker_states = {}
+        worker_states: Dict[int, Dict[str, Any]] = {}
         for w in range(self.num_workers):
             # In real distributed system, we'd query the worker's metrics from the collector
             # aggregate recent history to get 'current' capabilities
@@ -99,7 +99,7 @@ class ShardSenseRuntime:
                 "cpu_util": cpu
             }
             
-        shard_states = {}
+        shard_states: Dict[int, Dict[str, Any]] = {}
         for i in range(self.num_shards):
             shard_states[i] = {
                 "shard_id": i,

@@ -1,5 +1,5 @@
 import copy
-from typing import Dict, List
+from typing import Any, Dict, List
 
 from shardsense.model.predictor import RuntimePredictor
 from shardsense.planner.cost import calculate_movement_cost
@@ -17,15 +17,15 @@ class GreedyResharder:
     def plan(
         self, 
         current_map: Dict[int, List[int]], 
-        worker_states: Dict[int, Dict], # info needed for prediction
-        shard_states: Dict[int, Dict]
+        worker_states: Dict[int, Dict[str, Any]], # info needed for prediction
+        shard_states: Dict[int, Dict[str, Any]]
     ) -> Dict[int, List[int]]:
         
         # 1. Deep copy current map to start modifying
         best_map = copy.deepcopy(current_map)
         
         # Helper to calc expected time for a mapping
-        def evaluate_map(assignment_map):
+        def evaluate_map(assignment_map: Dict[int, List[int]]) -> Dict[int, float]:
             times = {}
             for wid, sids in assignment_map.items():
                 w_time = 0.0
@@ -34,7 +34,7 @@ class GreedyResharder:
                     w_time += self.predictor.predict_batch_time(
                         worker_states[wid], 
                         shard_states[sid]
-                    )
+                    )  # type: ignore
                 times[wid] = w_time
             return times
 
@@ -77,7 +77,11 @@ class GreedyResharder:
                 
                 # Movement penalty
                 # We calculate delta from ORIGINAL input map, not previous step
-                move_cost = calculate_movement_cost(current_map, trial_map, {s: d['size_mb'] for s, d in shard_states.items()})
+                move_cost = calculate_movement_cost(
+                    current_map, 
+                    trial_map, 
+                    {s: float(d['size_mb']) for s, d in shard_states.items()}
+                )
                 
                 total_obj = max_t + (move_cost * self.penalty)
                 

@@ -11,10 +11,10 @@ class ShardedDataset(Dataset):
     Each 'Shard' is conceptually a range of indices in the original dataset.
     """
     def __init__(self, source_dataset: Dataset, assigned_shard_ids: List[int], shard_size: int):
-        self.source = source_dataset
-        self.assigned_shards = assigned_shard_ids
-        self.shard_size = shard_size
-        self.valid_indices = self._build_indices()
+        self.source: Dataset = source_dataset
+        self.assigned_shards: List[int] = assigned_shard_ids
+        self.shard_size: int = shard_size
+        self.valid_indices: List[int] = self._build_indices()
         # print(f"Debug ShardedDataset: Shards={assigned_shard_ids}, Total={len(self.valid_indices)}")
 
     def _build_indices(self) -> List[int]:

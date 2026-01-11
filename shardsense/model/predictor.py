@@ -1,9 +1,9 @@
-from typing import Dict, List
+from typing import Any, Dict, List
 
 from shardsense.model.features import FeatureBuilder
 
 try:
-    import xgboost as xgb
+    import xgboost as xgb  # type: ignore
     HAS_XGB = True
 except ImportError:
     HAS_XGB = False
@@ -22,7 +22,7 @@ class RuntimePredictor:
         self.features = FeatureBuilder()
         self.is_trained = False
 
-    def train(self, training_data: List[Dict]):
+    def train(self, training_data: List[Dict[str, Any]]):
         if len(training_data) < 50:
             # print("Not enough data to train (need 50+ samples).")
             return
@@ -36,7 +36,7 @@ class RuntimePredictor:
         self.model.fit(X, y)
         self.is_trained = True
 
-    def predict_batch_time(self, worker_state: Dict, shard_state: Dict) -> float:
+    def predict_batch_time(self, worker_state: Dict[str, Any], shard_state: Dict[str, Any]) -> float:
         """
         Returns predicted ms for a single pairing.
         """

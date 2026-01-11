@@ -1,5 +1,5 @@
 import sqlite3
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from shardsense.telemetry.schema import AssignmentLog, ShardMetrics, WorkerMetrics
 
@@ -56,8 +56,10 @@ class MetricsCollector:
         db_path = self.db_path
         if db_path:
             with sqlite3.connect(db_path) as conn:
-                conn.execute('INSERT OR REPLACE INTO shard_metadata (shard_id, size_mb, hotness) VALUES (?, ?, ?)',
-                             (shard.shard_id, shard.size_mb, shard.hotness_score))
+                conn.execute(
+                    'INSERT OR REPLACE INTO shard_metadata (shard_id, size_mb, hotness) VALUES (?, ?, ?)',
+                    (shard.shard_id, shard.size_mb, shard.hotness_score)
+                )
 
     def push_worker_metrics(self, metrics: WorkerMetrics):
         # 1. In-memory buffer for Model
@@ -72,8 +74,12 @@ class MetricsCollector:
             path = self.db_path
             with sqlite3.connect(path) as conn:
                 conn.execute(
-                    'INSERT INTO worker_metrics (timestamp, worker_id, cpu_util, io_read_mb_s, batch_time_ms) VALUES (?, ?, ?, ?, ?)',
-                    (metrics.timestamp, metrics.worker_id, metrics.cpu_util, metrics.io_read_mb_s, metrics.batch_time_ms)
+                    'INSERT INTO worker_metrics (timestamp, worker_id, cpu_util, io_read_mb_s, batch_time_ms) '
+                    'VALUES (?, ?, ?, ?, ?)',
+                    (
+                        metrics.timestamp, metrics.worker_id, metrics.cpu_util, 
+                        metrics.io_read_mb_s, metrics.batch_time_ms
+                    )
                 )
 
     def log_assignment(self, log: AssignmentLog):
@@ -86,7 +92,7 @@ class MetricsCollector:
                     (log.epoch, log.worker_id, log.shard_id, log.mean_batch_time_ms)
                 )
 
-    def get_training_data(self) -> List[Dict]:
+    def get_training_data(self) -> List[Dict[str, Any]]:
         """
         Joins assignment logs with worker/shard stats to create training rows.
         """

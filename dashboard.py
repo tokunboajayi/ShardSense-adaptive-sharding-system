@@ -44,7 +44,8 @@ try:
     with col1:
         st.subheader("Current Shard Distribution")
         df_assign = pd.read_sql(
-            "SELECT epoch, worker_id, COUNT(shard_id) as shard_count FROM assignments GROUP BY epoch, worker_id ORDER BY epoch DESC", 
+            "SELECT epoch, worker_id, COUNT(shard_id) as shard_count "
+            "FROM assignments GROUP BY epoch, worker_id ORDER BY epoch DESC", 
             conn
         )
         
@@ -65,7 +66,7 @@ try:
     
     conn.close()
 
-except Exception as e:
+except Exception as e: # noqa: F841
     st.error(f"Could not connect to database: {e}")
     st.info("Run 'python demo_real.py' to generate data.")
 
