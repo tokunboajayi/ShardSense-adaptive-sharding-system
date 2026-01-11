@@ -1,10 +1,9 @@
 import random
-import time
-from typing import List, Dict, Optional
 from dataclasses import dataclass, field
+from typing import Dict, List
 
-from shardsense.sim.actors import Worker, Shard
-from shardsense.telemetry.schema import WorkerMetrics, ShardMetrics
+from shardsense.sim.actors import Shard, Worker
+
 
 @dataclass
 class SimulationState:

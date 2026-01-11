@@ -1,6 +1,7 @@
-from typing import List, Iterator
-import torch
-from torch.utils.data import Dataset, Subset
+from typing import List
+
+from torch.utils.data import Dataset
+
 
 class ShardedDataset(Dataset):
     """

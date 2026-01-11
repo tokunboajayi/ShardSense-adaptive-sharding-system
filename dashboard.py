@@ -1,8 +1,8 @@
-import streamlit as st
-import pandas as pd
 import sqlite3
-import time
+
 import altair as alt
+import pandas as pd
+import streamlit as st
 
 st.set_page_config(page_title="ShardSense Dashboard", layout="wide")
 
@@ -20,7 +20,10 @@ try:
     
     # 1. Timeline of Worker Performance
     st.subheader("Worker Batch Times (ms)")
-    df_workers = pd.read_sql("SELECT timestamp, worker_id, batch_time_ms FROM worker_metrics ORDER BY timestamp DESC LIMIT 500", conn)
+    df_workers = pd.read_sql(
+        "SELECT timestamp, worker_id, batch_time_ms FROM worker_metrics ORDER BY timestamp DESC LIMIT 500", 
+        conn
+    )
     if not df_workers.empty:
         # Convert timestamp to something readable relative to start
         start_time = df_workers["timestamp"].min()
@@ -40,7 +43,10 @@ try:
     
     with col1:
         st.subheader("Current Shard Distribution")
-        df_assign = pd.read_sql("SELECT epoch, worker_id, COUNT(shard_id) as shard_count FROM assignments GROUP BY epoch, worker_id ORDER BY epoch DESC", conn)
+        df_assign = pd.read_sql(
+            "SELECT epoch, worker_id, COUNT(shard_id) as shard_count FROM assignments GROUP BY epoch, worker_id ORDER BY epoch DESC", 
+            conn
+        )
         
         if not df_assign.empty:
             latest_epoch = df_assign["epoch"].max()

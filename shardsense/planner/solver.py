@@ -1,7 +1,9 @@
-from typing import Dict, List, Tuple
 import copy
+from typing import Dict, List
+
 from shardsense.model.predictor import RuntimePredictor
-from shardsense.planner.cost import calculate_imbalance_cost, calculate_movement_cost
+from shardsense.planner.cost import calculate_movement_cost
+
 
 class GreedyResharder:
     """

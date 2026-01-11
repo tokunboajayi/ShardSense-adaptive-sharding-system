@@ -1,9 +1,9 @@
-import time
-import torch
-import random
 import threading
-from typing import List
+import time
+
+import torch
 from torch.utils.data import TensorDataset
+
 from shardsense.runtime.engine import ShardSenseRuntime
 from shardsense.telemetry.schema import AssignmentLog
 

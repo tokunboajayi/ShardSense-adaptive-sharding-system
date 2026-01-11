@@ -1,0 +1,2 @@
+[console_scripts]
+shardsense = shardsense.cli:main

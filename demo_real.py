@@ -1,9 +1,11 @@
 import time
+
 import torch
-import random
 from torch.utils.data import TensorDataset
+
 from shardsense.runtime.engine import ShardSenseRuntime
 from shardsense.telemetry.schema import AssignmentLog
+
 
 def run_real_demo():
     print("Generating Synthetic Data (10,000 samples)...")
@@ -18,7 +20,13 @@ def run_real_demo():
     NUM_SHARDS = 20
     EPOCHS = 10
     
-    runtime = ShardSenseRuntime(dataset, num_shards=NUM_SHARDS, num_workers=NUM_WORKERS, batch_size=32, db_path="shardsense.db")
+    runtime = ShardSenseRuntime(
+        dataset, 
+        num_shards=NUM_SHARDS, 
+        num_workers=NUM_WORKERS, 
+        batch_size=32, 
+        db_path="shardsense.db"
+    )
     
     # Inject Artificial "Slowdown" for Worker 1
     # We simulate this by sleeping in the loop if worker_id == 1

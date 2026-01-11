@@ -1,11 +1,12 @@
 import argparse
 import random
-import matplotlib.pyplot as plt
-from typing import List
 
-from shardsense.sim.actors import Worker, Shard
-from shardsense.sim.harness import SimulationEngine
+import matplotlib.pyplot as plt
+
 from shardsense.runtime.engine import ShardSenseRuntime
+from shardsense.sim.actors import Shard, Worker
+from shardsense.sim.harness import SimulationEngine
+
 
 def create_environment(num_workers: int, num_shards: int) -> SimulationEngine:
     workers = []

@@ -1,5 +1,5 @@
-from typing import Dict, List, Any
-import pandas as pd
+from typing import Dict, List
+
 from shardsense.model.features import FeatureBuilder
 
 try:

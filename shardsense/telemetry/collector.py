@@ -1,7 +1,8 @@
 import sqlite3
-import time
-from typing import List, Dict, Optional
-from shardsense.telemetry.schema import WorkerMetrics, ShardMetrics, AssignmentLog
+from typing import Dict, List, Optional
+
+from shardsense.telemetry.schema import AssignmentLog, ShardMetrics, WorkerMetrics
+
 
 class MetricsCollector:
     """
@@ -18,6 +19,8 @@ class MetricsCollector:
             self._init_db()
 
     def _init_db(self):
+        if not self.db_path:
+            return
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
         
@@ -50,8 +53,9 @@ class MetricsCollector:
 
     def register_shard(self, shard: ShardMetrics):
         self.shard_registry[shard.shard_id] = shard
-        if self.db_path:
-            with sqlite3.connect(self.db_path) as conn:
+        db_path = self.db_path
+        if db_path:
+            with sqlite3.connect(db_path) as conn:
                 conn.execute('INSERT OR REPLACE INTO shard_metadata (shard_id, size_mb, hotness) VALUES (?, ?, ?)',
                              (shard.shard_id, shard.size_mb, shard.hotness_score))
 
@@ -63,7 +67,10 @@ class MetricsCollector:
         
         # 2. Persistence for Dashboard
         if self.db_path:
-            with sqlite3.connect(self.db_path) as conn:
+            # Type narrowing via local assignment if needed, but simple check usually works. 
+            # Doing safe cast just in case.
+            path = self.db_path
+            with sqlite3.connect(path) as conn:
                 conn.execute(
                     'INSERT INTO worker_metrics (timestamp, worker_id, cpu_util, io_read_mb_s, batch_time_ms) VALUES (?, ?, ?, ?, ?)',
                     (metrics.timestamp, metrics.worker_id, metrics.cpu_util, metrics.io_read_mb_s, metrics.batch_time_ms)
@@ -72,7 +79,8 @@ class MetricsCollector:
     def log_assignment(self, log: AssignmentLog):
         self.assignment_logs.append(log)
         if self.db_path:
-             with sqlite3.connect(self.db_path) as conn:
+             path = self.db_path
+             with sqlite3.connect(path) as conn:
                 conn.execute(
                     'INSERT INTO assignments (epoch, worker_id, shard_id, batch_time_ms) VALUES (?, ?, ?, ?)',
                     (log.epoch, log.worker_id, log.shard_id, log.mean_batch_time_ms)

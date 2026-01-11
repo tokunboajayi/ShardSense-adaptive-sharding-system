@@ -1,4 +1,5 @@
-from typing import List, Dict
+from typing import Dict, List
+
 
 def calculate_imbalance_cost(worker_times: Dict[int, float]) -> float:
     """

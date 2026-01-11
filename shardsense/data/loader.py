@@ -1,7 +1,10 @@
 import time
-from typing import Iterator, Any
+from typing import Any, Iterator
+
 from torch.utils.data import DataLoader
+
 from shardsense.telemetry.collector import MetricsCollector, WorkerMetrics
+
 
 class MeasurableDataLoader:
     """
